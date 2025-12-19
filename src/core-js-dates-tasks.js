@@ -236,7 +236,9 @@ function getWeekNumberByDate(date) {
   const firstWeekISOindex = (firstWeek.getUTCDay() + 6) % 7;
   firstWeek.setUTCDate(firstWeek.getUTCDate() - firstWeekISOindex + 3);
 
-  const diffDays = (targetThursday.getTime() - firstWeek.getTime()) / MS_PER_DAY;
+  const diffDays =
+    (targetThursday.getTime() - firstWeek.getTime()) / MS_PER_DAY;
+
   const weekNumber = 1 + Math.floor(diffDays / 7);
 
   return weekNumber;
@@ -253,8 +255,34 @@ function getWeekNumberByDate(date) {
  * Date(2024, 0, 13) => Date(2024, 8, 13)
  * Date(2023, 1, 1) => Date(2023, 9, 13)
  */
-function getNextFridayThe13th(/* date */) {
-  throw new Error('Not implemented');
+function getNextFridayThe13th(date) {
+  const FRIDAY = 5;
+  const TARGET_DAY = 13;
+
+  const startMs = date.getTime();
+
+  let year = date.getFullYear();
+  let month = date.getMonth();
+
+  const isTargetDay = (candidate) => {
+    const isAfterStart = candidate.getTime() > startMs;
+    const isFriday = candidate.getDay() === FRIDAY;
+    return isAfterStart && isFriday;
+  };
+
+  let candidate;
+
+  do {
+    candidate = new Date(year, month, TARGET_DAY);
+
+    month += 1;
+    if (month === 12) {
+      month = 0;
+      year += 1;
+    }
+  } while (!isTargetDay(candidate));
+
+  return candidate;
 }
 
 /**
