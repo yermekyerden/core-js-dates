@@ -221,22 +221,22 @@ function getCountWeekendsInMonth(month, year) {
 function getWeekNumberByDate(date) {
   const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-  const utcDate = new Date(
+  const targetThursday = new Date(
     Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
   );
 
-  const utcDay = utcDate.getUTCDay();
+  const utcDay = targetThursday.getUTCDay();
   const isoWeekdayIndex = (utcDay + 6) % 7;
 
-  utcDate.setUTCDate(utcDate.getUTCDate() - isoWeekdayIndex + 3);
+  targetThursday.setUTCDate(targetThursday.getUTCDate() - isoWeekdayIndex + 3);
 
-  const isoWeekYear = utcDate.getUTCFullYear();
+  const isoWeekYear = targetThursday.getUTCFullYear();
 
   const firstWeek = new Date(Date.UTC(isoWeekYear, 0, 4));
   const firstWeekISOindex = (firstWeek.getUTCDay() + 6) % 7;
   firstWeek.setUTCDate(firstWeek.getUTCDate() - firstWeekISOindex + 3);
 
-  const diffDays = (utcDate.getTime() - firstWeek.getTime()) / MS_PER_DAY;
+  const diffDays = (targetThursday.getTime() - firstWeek.getTime()) / MS_PER_DAY;
   const weekNumber = 1 + Math.floor(diffDays / 7);
 
   return weekNumber;
